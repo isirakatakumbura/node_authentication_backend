@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Create Account</h2>
+    <div id="message"></div>
+
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="location" placeholder="Location" />
+    <button onclick="handleSignup()">Sign Up</button>
+
+    <p>Already have an account? <a href="/login.html">Log in</a></p>
+  </div>
+
+  <script>
+    async function handleSignup() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const location = document.getElementById('location').value;
+      const message = document.getElementById('message');
+
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, location }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          message.style.color = 'green';
+          message.textContent = 'Account created! Redirecting to login...';
+          setTimeout(() => window.location.href = '/login.html', 2000);
+        } else {
+          message.style.color = 'red';
+          message.textContent = data.message;
+        }
+
+      } catch (error) {
+        message.style.color = 'red';
+        message.textContent = 'Something went wrong. Please try again.';
+      }
+    }
+  </script>
+</body>
+</html>
