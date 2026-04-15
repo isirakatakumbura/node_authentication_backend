@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const {connectDB, sequelize} = require('./config/db');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));

@@ -18,6 +18,8 @@ const signup = async (req, res) => {
             email,
             password: hashPassword,
             location,
+            role: 'user',
+            isActive: true,
         });
 
         res.status(201).json({message: 'Account created successfully'});
@@ -38,13 +40,18 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(404).json({message: 'User not found'});
         }
+
+        if (!user.isActive) {
+            return res.status(403).json({message: 'Account has been deactivated. Please contact the administration.'});
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({message: 'Incorrect password'});
         }
 
         const token = jwt.sign(
-            {id: user.id, email: user.email, location: user.location},
+            {id: user.id, email: user.email, location: user.location, role: user.role},
             process.env.JWT_SECRET,
             {expiresIn: '7d'}
         );
@@ -80,6 +87,8 @@ const getUser = async (req, res) => {
             id: user.id,
             emai: user.email,
             location: user.location,
+            role: user.role,
+            isActive: user.isActive,
             createdAt: user.createdAt,
         });
 
