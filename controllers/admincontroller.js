@@ -80,7 +80,7 @@ const createUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: ['id', 'email', 'location', 'role', 'isActive', 'createdAt'],
+      attributes: ['id', 'email', 'location', 'role', 'isActive', 'createdAt', 'updateAt'],
       order: [['createdAt', 'DESC']],
     });
 
