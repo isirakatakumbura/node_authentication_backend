@@ -28,9 +28,11 @@ router.patch('/users/:id/role', verifyToken, isSuperAdmin, changeRole);
 // Superadmin and admin routes
 router.post('/create-user', verifyToken, isAdmin, createUser);
 router.get('/users', verifyToken, isAdmin, getAllUsers);
+
+// Authenticated users can view hotels; only admins can manage them.
+router.get('/hotels', verifyToken, getAllHotels);
+router.get('/hotels/:id', verifyToken, getHotelById);
 router.post('/hotels', verifyToken, isAdmin, createHotel);
-router.get('/hotels', verifyToken, isAdmin, getAllHotels);
-router.get('/hotels/:id', verifyToken, isAdmin, getHotelById);
 router.put('/hotels/:id', verifyToken, isAdmin, updateHotel);
 router.patch('/hotels/:id', verifyToken, isAdmin, updateHotel);
 router.delete('/hotels/:id', verifyToken, isAdmin, deleteHotel);
