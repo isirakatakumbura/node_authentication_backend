@@ -6,7 +6,7 @@ const Session = require('../models/session');
 // Signup
 const signup = async (req, res) => {
     try {
-        const {email, password, location} = req.body;
+        const {email, password, location, firstName, lastName, phoneNumber} = req.body;
         const existingUser = await User.findOne({where: {email}});
         if(existingUser) {
             return res.status(400).json({message: 'Email already registered'});
@@ -18,6 +18,9 @@ const signup = async (req, res) => {
             email,
             password: hashPassword,
             location,
+            firstName,
+            lastName,
+            phoneNumber,
             role: 'user',
             isActive: true,
         });
@@ -51,7 +54,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            {id: user.id, email: user.email, location: user.location, role: user.role},
+            {id: user.id, email: user.email, location: user.location, role: user.role, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber},
             process.env.JWT_SECRET,
             {expiresIn: '7d'}
         );
@@ -85,8 +88,11 @@ const getUser = async (req, res) => {
 
         res.status(200).json({
             id: user.id,
-            emai: user.email,
+            email: user.email,
             location: user.location,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
             role: user.role,
             isActive: user.isActive,
             createdAt: user.createdAt,

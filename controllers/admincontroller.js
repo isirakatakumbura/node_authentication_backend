@@ -5,7 +5,7 @@ const User = require('../models/user');
 // CREATE ADMIN - superadmin only
 const createAdmin = async(req, res) =>  {
     try {
-        const {email, password, location} = req.body;
+        const {email, password, location, firstName, lastName, phoneNumber} = req.body;
 
         const existingUser = await User.findOne({where: {email}});
         if(existingUser) {
@@ -18,6 +18,9 @@ const createAdmin = async(req, res) =>  {
             email,
             password: hashPassword,
             location,
+            firstName,
+            lastName,
+            phoneNumber,
             role: 'admin',
             isActive: true,
         });
@@ -28,6 +31,9 @@ const createAdmin = async(req, res) =>  {
                 id: newAdmin.id,
                 email: newAdmin.email,
                 location: newAdmin.location,
+                firstName: newAdmin.firstName,
+                lastName: newAdmin.lastName,
+                phoneNumber: newAdmin.phoneNumber,
                 role: newAdmin.role,
             }
         });
@@ -40,7 +46,7 @@ const createAdmin = async(req, res) =>  {
 // CREATE USER — superadmin and admin
 const createUser = async (req, res) => {
   try {
-    const { email, password, location } = req.body;
+    const { email, password, location, firstName, lastName, phoneNumber } = req.body;
 
     // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
@@ -56,6 +62,9 @@ const createUser = async (req, res) => {
       email,
       password: hashedPassword,
       location,
+      firstName,
+      lastName,
+      phoneNumber,
       role: 'user',
       isActive: true,
     });
@@ -66,6 +75,9 @@ const createUser = async (req, res) => {
         id: newUser.id,
         email: newUser.email,
         location: newUser.location,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        phoneNumber: newUser.phoneNumber,
         role: newUser.role,
       }
     });
@@ -80,7 +92,7 @@ const createUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: ['id', 'email', 'location', 'role', 'isActive', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'email', 'firstName', 'lastName', 'phoneNumber', 'location', 'role', 'isActive', 'createdAt', 'updatedAt'],
       order: [['createdAt', 'DESC']],
     });
 
