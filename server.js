@@ -5,6 +5,7 @@ const cors = require('cors');
 const { connectDB, sequelize } = require('./config/db');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const tourRoutes = require('./routes/tours');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/tours', tourRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend is running');
